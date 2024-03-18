@@ -14,6 +14,7 @@ export const themeSlice = createSlice({
     },
     fetchAPi : (state, action) =>{
       if (action.payload) {
+        console.log(action.payload, "action.payload")
         // Assuming action.payload is a number or string
         state.data = action.payload;
 

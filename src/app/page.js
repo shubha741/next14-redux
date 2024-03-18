@@ -1,22 +1,24 @@
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./page.module.css";
-import { store, makeStore} from "@/lib/store";
+import { store, makeStore } from "@/lib/store";
 import { fetchAPi } from "@/lib/features/themeSlice";
-export default async function Home() {
+import { userInfo } from "../api/api";
+export default function Home() {
+  const initialState = store.getState();
 
-  const initialState = store.getState()
-
-  if(Object.keys(initialState.theme.data).length == 0){
-    console.log(initialState, "Store is Empty")
-    console.log(initialState.theme.data, "initialState")
-    const myData = await fetch("https://jsonplaceholder.typicode.com/todos/1")
-    const data = await myData.json()
-    store.dispatch(fetchAPi(data))
-  }else{
-    console.log("data is already there")
+  if (Object.keys(initialState.theme.data).length == 0) {
+    console.log(initialState, "Store is Empty");
+    console.log(initialState.theme.data, "initialState");
+    userInfo()
+      .then((res) => store.dispatch(fetchAPi(res)))
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+      console.log("Executing in homeoage ")
+  } else {
+    console.log("data is already there");
   }
-
 
   return (
     <main className={styles.main}>
@@ -93,7 +95,6 @@ export default async function Home() {
           </h2>
           <p>Go to Contact page.</p>
         </Link>
-
       </div>
     </main>
   );
